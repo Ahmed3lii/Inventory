@@ -1,0 +1,270 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+int main()
+{
+
+    printf("Enter the number of DEMAND FOR the products\n");
+    int number_of_demand; //number of demands
+    scanf("%d",& number_of_demand);//array of demand of products column of demand
+    int i;
+    int demand_array[number_of_demand],frequancy_of_demand[number_of_demand] ;
+    int start_interval_of_demand[number_of_demand],end_interval_of_demand[number_of_demand];
+    int sum_of_frequancies=0;
+    double probapilty_of_demand[number_of_demand],cumulative_probapilty_of_demand[number_of_demand];
+    printf("Enter DEMANDS OF PRODUCTS:\n");
+    for (i=0; i<number_of_demand; i++)
+    {
+        scanf("%d",&demand_array[i]);
+    }
+    printf("Enter FREQUANCIES OF PRODUCTS:\n");
+    for (i=0; i<number_of_demand; i++)
+    {
+        scanf("%d",&frequancy_of_demand[i]);
+        sum_of_frequancies += frequancy_of_demand[i];
+    }
+    for (i=0; i<number_of_demand; i++)
+    {
+        probapilty_of_demand[i]=((double)frequancy_of_demand[i]/(double)sum_of_frequancies);
+    }
+    for (i=0; i<number_of_demand; i++)
+    {
+        if (i==0)
+        {
+            cumulative_probapilty_of_demand[i]=probapilty_of_demand[i];
+        }
+        else
+        {
+            cumulative_probapilty_of_demand[i]=cumulative_probapilty_of_demand[i-1]+probapilty_of_demand[i];
+        }
+    }
+    for (i=0; i<number_of_demand; i++)
+    {
+        if (i==0)
+        {
+            start_interval_of_demand[i]=1;
+            end_interval_of_demand[i]=cumulative_probapilty_of_demand[i]*100;
+        }
+        else
+        {
+            start_interval_of_demand[i]=end_interval_of_demand[i-1]+1;
+            end_interval_of_demand[i]=cumulative_probapilty_of_demand[i]*100;
+        }
+    }
+    printf("DEMAND TABLE\n");
+    for (i=0; i<number_of_demand; i++)
+    {
+        printf("%d\t %d\t %lf\t %lf\t %d to %d\n",demand_array[i],frequancy_of_demand[i], probapilty_of_demand[i],cumulative_probapilty_of_demand[i],start_interval_of_demand[i],end_interval_of_demand[i]);
+    }
+
+
+
+
+    /*leadtime table*/
+
+    int number_of_leadtime; //number of demands
+    int sum_of_frequancies_leadtime=0;
+
+    printf("Enter the number of LEADTIME\n");
+    scanf("%d",& number_of_leadtime);//array of demand of products column of demand
+    printf("Enter LEADTIME(days):\n");
+    int leadtime_array[number_of_leadtime],frequancy_of_leadtime[number_of_leadtime] ;
+    double probapilty_of_leadtime[number_of_leadtime];
+    double cumulative_probapilty_of_leadtime[number_of_leadtime];
+    int start_interval_of_leadtime[number_of_leadtime],end_interval_of_leadtime[number_of_leadtime];
+    for (i=0; i<number_of_leadtime; i++)
+    {
+        scanf("%d",&leadtime_array[i]);
+    }
+    printf("Enter FREQUANCIES :\n");
+
+    for (i=0; i<number_of_leadtime; i++)
+    {
+        scanf("%d",&frequancy_of_leadtime[i]);
+        sum_of_frequancies_leadtime += frequancy_of_leadtime[i];
+    }
+
+    for (i=0; i<number_of_leadtime; i++)
+    {
+        probapilty_of_leadtime[i]=((double)frequancy_of_leadtime[i]/(double)sum_of_frequancies_leadtime);
+    }
+    for (i=0; i<number_of_leadtime; i++)
+    {
+        if (i==0)
+        {
+            cumulative_probapilty_of_leadtime[i]=probapilty_of_leadtime[i];
+        }
+        else
+        {
+            cumulative_probapilty_of_leadtime[i]=cumulative_probapilty_of_leadtime[i-1]+probapilty_of_leadtime[i];
+        }
+    }
+
+    for (i=0; i<number_of_leadtime; i++)
+    {
+        if (i==0)
+        {
+            start_interval_of_leadtime[i]=1;
+            end_interval_of_leadtime[i]=cumulative_probapilty_of_leadtime[i]*100;
+        }
+        else
+        {
+            start_interval_of_leadtime[i]=end_interval_of_leadtime[i-1]+1;
+            end_interval_of_leadtime[i]=cumulative_probapilty_of_leadtime[i]* 100;
+        }
+    }
+    printf("LEADTIME TABLE\n");
+    for (i=0; i<number_of_leadtime; i++)
+    {
+        printf("%d\t %d\t %lf\t %lf\t %d to %d\n",leadtime_array[i],frequancy_of_leadtime[i], probapilty_of_leadtime[i],cumulative_probapilty_of_leadtime[i],start_interval_of_leadtime[i],end_interval_of_leadtime[i]);
+    }
+
+
+
+
+
+    /*FINAL TABLE*/
+    int number_of_days_to_simulat,order_quantity,reorder_point;
+    printf("ENTER THE NUMBER OF DAYS TO SIMULATION\n");
+    scanf("%d",&number_of_days_to_simulat);
+    printf("ENTER THE ORDER QUANTITY\n");
+    scanf("%d",&order_quantity);
+    printf("ENTER THE REORDER POINT\n");
+    scanf("%d",&reorder_point);
+    int j,x=0;
+    int Beginnig_Inventory[number_of_days_to_simulat],ending_inventory[number_of_days_to_simulat];
+    int random_numbers_demand[number_of_days_to_simulat],random_numbers_leadtime[number_of_days_to_simulat],demand_result[number_of_days_to_simulat], leadtime_result[number_of_days_to_simulat];
+    int unit_recived[number_of_days_to_simulat];
+    int lost_sales[number_of_days_to_simulat];
+    int place_order[number_of_days_to_simulat];
+        for(i=0; i<number_of_days_to_simulat; i++)
+    {
+        unit_recived[i]=0;
+        lost_sales[i]=0;
+        random_numbers_leadtime[number_of_days_to_simulat]=0;
+        leadtime_result[i]=0;
+        place_order[i]=0;
+
+    }
+
+    Beginnig_Inventory[0]=order_quantity;
+    unit_recived[0]=0;
+
+    for (i=0; i<number_of_days_to_simulat; i++)
+    {
+        random_numbers_demand[i]=rand() % 100 + 1;
+        for (j=0; j<number_of_demand; j++)
+        {
+            if (random_numbers_demand[i]>=start_interval_of_demand[j]&&random_numbers_demand[i]<=end_interval_of_demand[j])
+            {
+                demand_result[i]=demand_array[j];
+                break;
+            }
+        }
+
+    }
+
+   for(i=0; i<number_of_days_to_simulat; i++)
+    {
+        ending_inventory[i]=Beginnig_Inventory[i]-demand_result[i];
+        Beginnig_Inventory[i+1]=ending_inventory[i]+unit_recived[i];
+        if (ending_inventory[i]>reorder_point){
+            lost_sales[i]=0;
+            place_order[i]=0;
+            random_numbers_leadtime[i]=0;
+            leadtime_result[i]=0;
+        }
+       else if (ending_inventory[i]<=reorder_point)
+        {
+             if (ending_inventory[i]<=0){
+            lost_sales[i]=abs(ending_inventory[i]);
+            ending_inventory[i]=0;
+        }
+            place_order[i]=1;
+            random_numbers_leadtime[i]=rand() % 100 + 1;
+            for (j=0; j<number_of_leadtime; j++)
+            {
+                if (random_numbers_leadtime[i]>=start_interval_of_leadtime[j]&&random_numbers_leadtime[i]<=end_interval_of_leadtime[j])
+                {
+                    leadtime_result[i]=leadtime_array[j];
+                }
+            }
+            if (x==0){
+                    if (leadtime_result[i]>0){
+                       unit_recived[i+leadtime_result[i]+1]=order_quantity;
+                       x=leadtime_result[i]+1;
+                    }
+            }
+            else{
+                x=x-1;
+                place_order[i]=0;
+            random_numbers_leadtime[i]=0;
+            leadtime_result[i]=0;
+            }
+            }
+        Beginnig_Inventory[i+1]=ending_inventory[i]+unit_recived[i+1];
+    }
+
+
+// Calculate the average
+    double sum_ending_inventory=0.0,sum_lost_sales=0.0, sum_place_order=0.0;
+    double average_ending_inventory=0.0,average_lost_sales=0.0, average_place_order=0.0;
+    for (i=0; i<number_of_days_to_simulat; i++)
+    {
+        sum_ending_inventory +=(double) ending_inventory[i];
+        sum_lost_sales +=(double) lost_sales[i];
+        sum_place_order +=(double) place_order[i];
+    }
+    average_ending_inventory=(double)sum_ending_inventory/(double)number_of_days_to_simulat;
+
+    average_lost_sales =(double)sum_lost_sales/(double)number_of_days_to_simulat;
+
+    average_place_order=(double)sum_place_order/(double)number_of_days_to_simulat;
+
+//Gathering the outside Data
+    int number_of_openning_days=0;
+    double cost_of_placing_one_order=0.0,cost_of_holding_one_unit_for_a_year=0.0,cost_of_holding_one_unit_for_one_day=0.0,cost_per_lost_sale=0.0;
+
+    printf("Enter the number of opening Days : Simkin's store is open 200 days a year.\n");
+    scanf("%d",&number_of_openning_days);
+
+    printf("Enter the cost of placing one order :\n");
+    scanf("%lf",&cost_of_placing_one_order);
+
+     printf("Enter cost of holding one unit for a year :\n");
+    scanf("%lf",&cost_of_holding_one_unit_for_a_year);
+
+    printf("Enter cost per lost sale :\n");
+    scanf("%lf",&cost_per_lost_sale);
+
+    cost_of_holding_one_unit_for_one_day = cost_of_holding_one_unit_for_a_year /(double)number_of_openning_days ;
+
+//Calculate costs
+    double daily_order_cost,daily_holding_cost,daily_stockout_cost;
+    double total_daily_inventory_cost= 5.5;
+
+    daily_order_cost= cost_of_placing_one_order * average_place_order;
+    daily_holding_cost = cost_of_holding_one_unit_for_one_day * average_ending_inventory ;
+    daily_stockout_cost = (double)(cost_per_lost_sale * average_lost_sales) ;
+
+    total_daily_inventory_cost = (double)(daily_holding_cost + daily_order_cost + daily_stockout_cost) ;
+
+    printf("\n");
+    printf("DAY  UNITSRECEIVED  BEGINNINGINVENTORY  RANDOMNUMBER DEMAND ENDINGINVENTORY LOSTSALES\tORDER\tRANDOMNUMBER\tLEADTIME\t \n");
+    for (i=0; i<number_of_days_to_simulat; i++)
+        {
+
+            printf("%d\t %d\t \t%d\t\t%d\t\t%d\t%d\t\t%d\t %d\t \t%d\t \t%d\n",i+1,unit_recived[i],Beginnig_Inventory[i],random_numbers_demand[i],demand_result[i],ending_inventory[i],lost_sales[i],place_order[i],random_numbers_leadtime[i],leadtime_result[i]);
+        }
+
+        printf("========================================================================================================================\n");
+        printf("===========================");
+        printf("TOTAL DAILY INVENTORY COST : %lf $  ",total_daily_inventory_cost);
+         printf("==================================================== \n");
+        printf("===========================");
+        printf("TOTAL ANNUAL INVENTORY COST : %lf $ ",total_daily_inventory_cost * number_of_openning_days);
+         printf("================================================= ");
+        scanf("%d",&i);
+
+    return 0;
+}
